@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Muggle</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <style>
+        body {
+            height: 100vh;
+            background-color: #29384C;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .frame {
+            width: 225px;
+            height: 288px;
+            padding: 51px;
+            background-image: url("https://res.cform.cn/unzip/1581566323088_1137315517898494/frame.png");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+        }
+        .fragment {
+            display: flex;
+        }
+        .piece {
+            width: 75px;
+            height: 72px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .result {
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="frame"></div>
+        <div class="result"></div>
+        <div class="fragment"></div>
+    </div>
+    
+    <script>
+        var $frame = $(".frame")
+        var $result = $(".result")
+        var $fragment = $(".fragment")
+        var num_of_fragments = 12
+        var shuffled_fragments = _.shuffle(_.range(1, num_of_fragments+1))
+        
+        for (var fragment_id of shuffled_fragments) {
+            var $piece = $(`<div class="piece" id="${fragment_id}"></div>`)
+            $piece.css("background-image", `url("https://res.cform.cn/unzip/1581566323088_1137315517898494/${fragment_id}.png")`)
+            $fragment.append($piece)
+        }
+
+        $(".piece").click(function () {
+            var $this_piece = $(this)
+            if ($this_piece.hasClass("in-the-frame")) {
+                $this_piece.toggleClass("in-the-frame")
+                $fragment.append($this_piece)
+            }
+            else{
+                $this_piece.toggleClass("in-the-frame")
+                $frame.append($this_piece)
+            }
+
+            if ($(".in-the-frame").length == num_of_fragments) {
+                var frags_in_frame = []
+                $(".frame").children().each(function () {
+                    frags_in_frame.push($(this).attr("id"))
+                })
+                if (frags_in_frame.join() == "1,2,3,4,5,6,7,8,9,10,11,12") {
+                    $result.text("Congratulations!!")
+                }
+                else {
+                    $result.text("Try again")
+                }
+            }
+            else {
+                $result.text("")
+            }
+        })
+    </script>
+</body>
+</html>
